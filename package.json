@@ -1,0 +1,19 @@
+{
+  "name": "mtools",
+  "version": "1.0.0",
+  "description": "a simple tools for javascript",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "main.ts",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "dev",
+    "build":"tsc\nnode esbuild.config.cjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}
