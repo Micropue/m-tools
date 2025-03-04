@@ -16,5 +16,5 @@ $mt.cookie.set({
 $mt.cookie.remove("newCookie")
 //获取cookie
 $mt.cookie.getAll() 
-//返回{"newCookie":"hell world",}
+//返回{"newCookie":"hello world",}
 ```

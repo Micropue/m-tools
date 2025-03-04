@@ -10,7 +10,6 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "dev",
     "build":"tsc\nnode esbuild.config.cjs"
   },
   "devDependencies": {
