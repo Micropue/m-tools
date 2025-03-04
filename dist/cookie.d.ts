@@ -11,5 +11,5 @@ export declare const cookie: {
         expires?: number;
     }): void;
     get(key: string): string | false;
-    remove(key: string, path: string): void;
+    remove(key: string, path?: string): void;
 };

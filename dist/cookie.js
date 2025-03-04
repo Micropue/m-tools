@@ -18,6 +18,6 @@ export const cookie = {
         return this.getAll()[key] ?? false;
     },
     remove(key, path) {
-        document.cookie = `${key}=; path=${path}; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+        document.cookie = `${key}=; path=${path || "/"}; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
     }
 };
