@@ -4,8 +4,12 @@ export function $(selector) {
         css(option, value) {
         }
     };
+    const actions = {};
     for (const i in features) {
         this[i] = features[i];
     }
-    return features;
+    if (selector)
+        return features;
+    else
+        return actions;
 }
