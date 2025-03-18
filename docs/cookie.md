@@ -1,4 +1,16 @@
-## $mt.cookie
+## $m.cookie 
+
+### 用于简单化操作`cookie`。
+
+方法：
+
+`getAll()`获取所有cookie，返回一个对象。索引为cookie名称，值为cookie值。
+
+`set(config)`设置或调整cookie。其中cookie的名称是必须的。更多可以详见developer.mozilla.org
+
+`get(key)`获取cookie的值，存在该cookie时返回值，不存在则返回false。
+
+`remove(key,path?)`删除cookie，无返回值。
 
 原型定义：
 
@@ -20,14 +32,4 @@ export declare const cookie: {
 };
 
 ```
-
-方法：
-
-`getAll()`获取所有cookie，返回一个对象。索引为cookie名称，值为cookie值。
-
-`set(config)`设置或调整cookie。其中cookie的名称是必须的。更多可以详见developer.mozilla.org
-
-`get(key)`获取cookie的值，存在该cookie时返回值，不存在则返回false。
-
-`remove(key,path?)`删除cookie，无返回值。
 

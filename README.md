@@ -2,19 +2,19 @@
 
 使用`typescript`编写，支持类`vue`框架的代码补全提示或直接在页面上使用。
 
-**所有功能都在全局对象`$mt`下，部分工具支持链式调用。**
+**所有功能都在全局对象`$m`下，部分工具支持链式调用。**
 
 ### 示例：操作`cookie`
 
 ```javascript
 //新建/更改cookie
-$mt.cookie.set({
+$m.cookie.set({
   key:"newCookie",
   value:"hello world"
 })
 //删除cookie
-$mt.cookie.remove("newCookie")
+$m.cookie.remove("newCookie")
 //获取cookie
-$mt.cookie.getAll() 
+$m.cookie.getAll() 
 //返回{"newCookie":"hello world",}
 ```
