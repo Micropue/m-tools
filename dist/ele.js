@@ -42,69 +42,119 @@ const useCore = (element) => {
             return this;
         },
         append: function (template) {
+            const tmp = document.createElement("span");
+            tmp.innerHTML = template;
+            const childArray = Array.from(tmp.childNodes);
+            for (const node of childArray) {
+                element.append(node);
+            }
             return this;
         },
         prepend: function (template) {
-            throw new Error("Function not implemented.");
+            const tmp = document.createElement("span");
+            tmp.innerHTML = template;
+            const childArray = Array.from(tmp.childNodes).reverse();
+            for (const node of childArray) {
+                element.prepend(node);
+            }
+            return this;
         },
         focus: function () {
-            throw new Error("Function not implemented.");
+            const ele = element;
+            ele.focus();
+            return this;
         },
         blur: function () {
-            throw new Error("Function not implemented.");
+            const ele = element;
+            ele.blur();
+            return this;
         },
         css: function (name, value) {
-            throw new Error("Function not implemented.");
+            if (!value) {
+                return getComputedStyle(element)[name] || null;
+            }
+            else {
+                if (name !== "length" && name !== "parentRule") {
+                    element.style.setProperty(name.toString(), value.toString());
+                }
+                else {
+                    console.warn(`尝试修改只读属性: ${name}`);
+                }
+                return this;
+            }
         },
         on: function (type, listener) {
-            throw new Error("Function not implemented.");
+            element.addEventListener(type.toString(), listener);
+            return this;
         },
         offset: function () {
-            throw new Error("Function not implemented.");
+            return {
+                top: element.offsetTop,
+                left: element.offsetLeft,
+                width: element.offsetWidth,
+                height: element.offsetHeight,
+            };
         },
-        width: 0,
-        height: 0,
-        top: 0,
-        left: 0,
+        width: (() => {
+            return element.getBoundingClientRect().width;
+        })(),
+        height: (() => {
+            return element.getBoundingClientRect().height;
+        })(),
+        top: (() => {
+            return element.getBoundingClientRect().top;
+        })(),
+        left: (() => {
+            return element.getBoundingClientRect().left;
+        })(),
         hide: function () {
-            throw new Error("Function not implemented.");
+            const all = element?.getAttribute("style");
+            element.setAttribute("style", all + "; display: none");
+            return this;
         },
         show: function () {
-            throw new Error("Function not implemented.");
+            const all = element?.getAttribute("style");
+            if (all) {
+                element.setAttribute("style", all.replace(/display:[ ]*none/, ""));
+            }
+            else {
+                element.style.display = "initial";
+            }
+            return this;
         },
         remove: function () {
-            throw new Error("Function not implemented.");
+            element.remove();
         },
         html: function (innerHTML) {
-            throw new Error("Function not implemented.");
+            element.innerHTML = innerHTML;
+            return this;
         },
         text: function (innerText) {
-            throw new Error("Function not implemented.");
+            element.innerText = innerText;
+            return this;
         },
         innerWidth: function () {
-            throw new Error("Function not implemented.");
+            return window.innerWidth;
         },
         innerHeight: function () {
-            throw new Error("Function not implemented.");
+            return window.innerHeight;
         },
         outerWidth: function () {
-            throw new Error("Function not implemented.");
+            return window.outerWidth;
         },
         outerHeight: function () {
-            throw new Error("Function not implemented.");
-        },
-        each: function (eachItems) {
-            throw new Error("Function not implemented.");
+            return window.outerHeight;
         },
         scrollTo: function (scrollHeight) {
-            throw new Error("Function not implemented.");
+            element.scrollTop = scrollHeight;
+            return this;
         },
         fadeIn: function () {
             throw new Error("Function not implemented.");
         },
         fadeOut: function () {
             throw new Error("Function not implemented.");
-        }
+        },
     };
     return core;
 };
@@ -112,7 +162,7 @@ export function $(selector) {
     const ele = document.querySelectorAll(selector);
     if (ele.length > 1) {
         const rst = [];
-        ele.forEach(self => rst.push(useCore(self)));
+        ele.forEach((self) => rst.push(useCore(self)));
         return rst;
     }
     else {

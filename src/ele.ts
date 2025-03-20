@@ -23,161 +23,229 @@
  * html() 添加html代码进入元素
  * text() 添加innerText进入元素
  * innerWidth()、innerHeight()、outerWidth()、outerHeight()
- * each(self=>{}) 元素遍历
  * scrollTo() 元素内滚动
  * fadeIn()
  * fadeOut()
  */
 interface Offset {
-    readonly top: number
-    readonly left: number
-    readonly width: number
-    readonly height: number
+    readonly top: number;
+    readonly left: number;
+    readonly width: number;
+    readonly height: number;
 }
 interface ElementCore<T> {
-    value: T | ElementCore<T>[]
-    attr(prop: string, value?: string): string | ElementCore<T> | false
-    readonly classList: string[]
-    hasClass(className: string): boolean
-    addClass(className: string): ElementCore<T>
-    removeClass(className: string): ElementCore<T>
-    toggleClass(className: string): ElementCore<T>
-    append(template: string): ElementCore<T>
-    prepend(template: string): ElementCore<T>
-    focus(): ElementCore<T>
-    blur(): ElementCore<T>
-    css(name: keyof CSSStyleDeclaration, value: string | number): (string | number) | ElementCore<T>
-    on(type: GlobalEventHandlersEventMap, listener: EventListenerOrEventListenerObject): ElementCore<T>
-    offset(): Offset
-    readonly width: number
-    readonly height: number
-    readonly top: number
-    readonly left: number
-    hide(): ElementCore<T>
-    show(): ElementCore<T>
-    remove(): void
-    html(innerHTML: any): ElementCore<T>
-    text(innerText: any): ElementCore<T>
-    innerWidth(): number
-    innerHeight(): number
-    outerWidth(): number
-    outerHeight(): number
-    each(eachItems: (item: ElementCore<T> | undefined) => void): ElementCore<T>
-    scrollTo(scrollHeight: number): ElementCore<T>
-    fadeIn(): ElementCore<T>
-    fadeOut(): ElementCore<T>
+    value: T | ElementCore<T>[];
+    attr(prop: string, value?: string): string | ElementCore<T> | false;
+    readonly classList: string[];
+    hasClass(className: string): boolean;
+    addClass(className: string): ElementCore<T>;
+    removeClass(className: string): ElementCore<T>;
+    toggleClass(className: string): ElementCore<T>;
+    append(template: string): ElementCore<T>;
+    prepend(template: string): ElementCore<T>;
+    focus(): ElementCore<T>;
+    blur(): ElementCore<T>;
+    css(
+        name: keyof CSSStyleDeclaration,
+        value: string | number
+    ): (string | number) | ElementCore<T>;
+    on(
+        type: GlobalEventHandlersEventMap,
+        listener: EventListenerOrEventListenerObject
+    ): ElementCore<T>;
+    offset(): Offset;
+    readonly width: number;
+    readonly height: number;
+    readonly top: number;
+    readonly left: number;
+    hide(): ElementCore<T>;
+    show(): ElementCore<T>;
+    remove(): void;
+    html(innerHTML: any): ElementCore<T>;
+    text(innerText: any): ElementCore<T>;
+    innerWidth(): number;
+    innerHeight(): number;
+    outerWidth(): number;
+    outerHeight(): number;
+    scrollTo(scrollHeight: number): ElementCore<T>;
+    fadeIn(): ElementCore<T>;
+    fadeOut(): ElementCore<T>;
 }
-const useCore = <T extends Element>(element: T) => {
+const useCore = <T extends HTMLElement>(element: T) => {
     const core: ElementCore<T> = {
         value: element,
-        attr: function (prop: string, value?: string): string | ElementCore<T> | false {
-            if (!prop) throw new Error("can't find parameter: 'prop'")
+        attr: function (
+            prop: string,
+            value?: string
+        ): string | ElementCore<T> | false {
+            if (!prop) throw new Error("can't find parameter: 'prop'");
             if (value) {
-                element.setAttribute(prop, value)
-                return this
+                element.setAttribute(prop, value);
+                return this;
             } else {
-                return element.getAttribute(prop) ?? false
+                return element.getAttribute(prop) ?? false;
             }
         },
         classList: (() => {
-            return [...element.classList]
+            return [...element.classList];
         })(),
         hasClass: function (className: string): boolean {
-            return this.classList.includes(className)
+            return this.classList.includes(className);
         },
         addClass: function (className: string): ElementCore<T> {
-            if (!className) throw new Error("can't find parameter: 'className'")
-            element.classList.add(className)
-            return this
+            if (!className) throw new Error("can't find parameter: 'className'");
+            element.classList.add(className);
+            return this;
         },
         removeClass: function (className: string): ElementCore<T> {
-            if (!className) throw new Error("can't find parameter: 'className'")
-            element.classList.remove(className)
-            return this
+            if (!className) throw new Error("can't find parameter: 'className'");
+            element.classList.remove(className);
+            return this;
         },
         toggleClass: function (className: string): ElementCore<T> {
-            if (!className) throw new Error("can't find parameter: 'className'")
+            if (!className) throw new Error("can't find parameter: 'className'");
             if (this.classList.includes(className)) {
-                element.classList.remove(className)
+                element.classList.remove(className);
             } else {
-                element.classList.add(className)
+                element.classList.add(className);
             }
-            return this
+            return this;
         },
         append: function (template: string): ElementCore<T> {
-            return this
+            const tmp = document.createElement("span");
+            tmp.innerHTML = template;
+            const childArray = Array.from(tmp.childNodes); // 复制 `childNodes`
+            for (const node of childArray) {
+                element.append(node);
+            }
+            return this;
         },
         prepend: function (template: string): ElementCore<T> {
-            throw new Error("Function not implemented.")
+            const tmp = document.createElement("span");
+            tmp.innerHTML = template;
+            const childArray = Array.from(tmp.childNodes).reverse(); // 反转以保证顺序
+            for (const node of childArray) {
+                element.prepend(node);
+            }
+            return this;
         },
         focus: function (): ElementCore<T> {
-            throw new Error("Function not implemented.")
+            const ele = element as unknown as HTMLElement;
+            ele.focus();
+            return this;
         },
         blur: function (): ElementCore<T> {
-            throw new Error("Function not implemented.")
+            const ele = element as unknown as HTMLElement;
+            ele.blur();
+            return this;
         },
-        css: function (name: keyof CSSStyleDeclaration, value: string | number): string | number | ElementCore<T> {
-            throw new Error("Function not implemented.")
+        css: function (
+            name: keyof CSSStyleDeclaration,
+            value: string | number
+        ): any | ElementCore<T> {
+            if (!value) {
+                // 使用 null 或者 undefined 来代替 false，这样可以更清晰地表示没有找到对应的样式值
+                return getComputedStyle(element)[name] || null;
+            } else {
+                // 检查 name 是否为 length 或其他只读属性
+                if (name !== "length" && name !== "parentRule") {
+                    (element as unknown as HTMLElement).style.setProperty(
+                        name.toString(),
+                        value.toString()
+                    );
+                } else {
+                    console.warn(`尝试修改只读属性: ${name}`);
+                }
+                return this;
+            }
         },
-        on: function (type: GlobalEventHandlersEventMap, listener: EventListenerOrEventListenerObject): ElementCore<T> {
-            throw new Error("Function not implemented.")
+
+        on: function (
+            type: GlobalEventHandlersEventMap,
+            listener: EventListenerOrEventListenerObject
+        ): ElementCore<T> {
+            element.addEventListener(type.toString(), listener);
+            return this;
         },
         offset: function (): Offset {
-            throw new Error("Function not implemented.")
+            return {
+                top: (element as unknown as HTMLElement).offsetTop,
+                left: (element as unknown as HTMLElement).offsetLeft,
+                width: (element as unknown as HTMLElement).offsetWidth,
+                height: (element as unknown as HTMLElement).offsetHeight,
+            };
         },
-        width: 0,
-        height: 0,
-        top: 0,
-        left: 0,
+        width: (() => {
+            return element.getBoundingClientRect().width;
+        })(),
+        height: (() => {
+            return element.getBoundingClientRect().height;
+        })(),
+        top: (() => {
+            return element.getBoundingClientRect().top;
+        })(),
+        left: (() => {
+            return element.getBoundingClientRect().left;
+        })(),
         hide: function (): ElementCore<T> {
-            throw new Error("Function not implemented.")
+            const all = element?.getAttribute("style");
+            (element as unknown as HTMLElement).setAttribute("style", all + "; display: none");
+            return this;
         },
         show: function (): ElementCore<T> {
-            throw new Error("Function not implemented.")
+            const all = element?.getAttribute("style");
+            if (all) {
+                element.setAttribute("style", all.replace(/display:[ ]*none/, ""));
+            } else {
+                element.style.display = "initial";
+            }
+            return this;
         },
         remove: function (): void {
-            throw new Error("Function not implemented.")
+            element.remove()
         },
         html: function (innerHTML: any): ElementCore<T> {
-            throw new Error("Function not implemented.")
+            element.innerHTML = innerHTML
+            return this
         },
         text: function (innerText: any): ElementCore<T> {
-            throw new Error("Function not implemented.")
+            element.innerText = innerText
+            return this
         },
         innerWidth: function (): number {
-            throw new Error("Function not implemented.")
+            return window.innerWidth
         },
         innerHeight: function (): number {
-            throw new Error("Function not implemented.")
+            return window.innerHeight
         },
         outerWidth: function (): number {
-            throw new Error("Function not implemented.")
+            return window.outerWidth
         },
         outerHeight: function (): number {
-            throw new Error("Function not implemented.")
-        },
-        each: function (eachItems: (item: ElementCore<T>) => void): ElementCore<T> {
-            throw new Error("Function not implemented.")
+            return window.outerHeight
         },
         scrollTo: function (scrollHeight: number): ElementCore<T> {
-            throw new Error("Function not implemented.")
+            element.scrollTop = scrollHeight
+            return this
         },
         fadeIn: function (): ElementCore<T> {
-            throw new Error("Function not implemented.")
+            throw new Error("Function not implemented.");
         },
         fadeOut: function (): ElementCore<T> {
-            throw new Error("Function not implemented.")
-        }
-    }
-    return core
-}
-export function $<T extends Element>(selector: string): ElementCore<T> | ElementCore<T>[] {
-    const ele = document.querySelectorAll(selector)
+            throw new Error("Function not implemented.");
+        },
+    };
+    return core;
+};
+export function $<T extends HTMLElement>(
+    selector: string
+): ElementCore<T> | ElementCore<T>[] {
+    const ele = document.querySelectorAll(selector);
     if (ele.length > 1) {
-        const rst: ElementCore<T>[] = []
-        ele.forEach(self => rst.push(useCore<T>(self as T)))
-        return rst
+        const rst: ElementCore<T>[] = [];
+        ele.forEach((self) => rst.push(useCore<T>(self as T)));
+        return rst;
     } else {
-        return useCore<T>(ele[0] as T)
+        return useCore<T>(ele[0] as T);
     }
 }

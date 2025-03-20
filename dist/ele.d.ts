@@ -32,10 +32,9 @@ interface ElementCore<T> {
     innerHeight(): number;
     outerWidth(): number;
     outerHeight(): number;
-    each(eachItems: (item: ElementCore<T> | undefined) => void): ElementCore<T>;
     scrollTo(scrollHeight: number): ElementCore<T>;
     fadeIn(): ElementCore<T>;
     fadeOut(): ElementCore<T>;
 }
-export declare function $<T extends Element>(selector: string): ElementCore<T> | ElementCore<T>[];
+export declare function $<T extends HTMLElement>(selector: string): ElementCore<T> | ElementCore<T>[];
 export {};
