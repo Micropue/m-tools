@@ -18,3 +18,23 @@ $m.cookie.remove("newCookie")
 $m.cookie.getAll() 
 //返回{"newCookie":"hello world",}
 ```
+
+### 示例：方便的Ajax操作
+
+```javascript
+$m.ajax({
+  url:"/",
+  //请求地址
+  data:{},
+  //请求携带数据
+  type:"GET",
+  //请求方法
+  method:"fetch",
+  //请求类型
+  success(data){},
+  //回调函数
+  error(data){},
+  //回调函数
+}).then().catch()
+```
+
