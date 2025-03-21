@@ -1,11 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-</head>
-<body>
     <script src="../dist/mTools.min.js"></script>
+</head>
+
+<body>
+    <h1>设置cookie</h1>
+    <form class="cookie">
+        <input type="text" name="name" required placeholder="名称">
+        <input type="text" name="content" required placeholder="内容">
+        <button>设置新cookie</button>
+    </form>
+    <button onclick="getallCookie()">获取所有cookie</button>
+    <p class="allcookieOUTPUt"></p>
+    <script>
+        const { cookie } = $m
+        document.querySelector(".cookie").onsubmit = e => {
+            e.preventDefault();
+            const name = document.querySelector("[name=name]").value
+            const content = document.querySelector("[name=content]").value
+            cookie.set({
+                key: name,
+                value: content
+            })
+        }
+        function getallCookie() {
+            document.querySelector(".allcookieOUTPUt").innerHTML = JSON.stringify(cookie.getAll())
+        }
+    </script>
+    <h1>元素选择器</h1>
+    <button onclick="getAllElement()">输出页面所有元素（JSON）</button>
+    <p class="elementuotput"></p>
+    <script>
+        const { $ } = $m
+        const elementuotput = document.querySelector('.elementuotput')
+        function getAllElement() {
+            elementuotput.innerHTML = JSON.stringify($('*'))
+        }
+    </script>
+    <button onclick="fadeTest()">淡入淡出</button>
+    <p class="fadeOut">这是一个示例</p>
+    <script>
+        let is = false
+        function fadeTest() {
+            is ? $('.fadeOut').fadeOut() : $('.fadeOut').fadeIn()
+            is = !is
+        }
+    </script>
+    <h1>AJAX测试</h1>
+    <button onclick="ajaxsend('xhr')">发送xhr</button>
+    <button onclick="ajaxsend('fetch')">发送fetch</button>
+    <select class="selection">
+        <option value="GET" selected>GET</option>
+        <option value="POST">POST</option>
+    </select>
+    <script>
+        function ajaxsend(method) {
+            const selection = document.querySelector(".selection")
+            $m.ajax({
+                url: "https://jsonplaceholder.typicode.com/todos/1",
+                method,
+                type: selection.value,
+                data: {
+                    a: 1,
+                    b: 2
+                },
+                success(data) {
+                    alert("success")
+                    console.log(data);
+                },
+                error(data) {
+                    alert("error")
+                    console.log(data);
+                }
+            }).then((value) => {
+                console.log(value);
+            }).catch(value => {
+                console.log(value);
+            })
+        }
+    </script>
 </body>
+
 </html>

@@ -4,9 +4,9 @@
 
 方法介绍：
 
- * attr 设置或获取元素属性
+attr 设置或获取元素属性
  * classList 当前元素的类名表「数组」
- * hasClass() 是否含有此类名
+ * hasClass 是否含有此类名
  * addClass() 添加类名
  * removeClass() 移除类名
  * toggleClass() 切换类名显示
@@ -24,10 +24,10 @@
  * html() 添加html代码进入元素
  * text() 添加innerText进入元素
  * innerWidth()、innerHeight()、outerWidth()、outerHeight()
- * each(self=>{}) 元素遍历
  * scrollTo() 元素内滚动
  * fadeIn() 淡入
  * fadeOut() 淡出
+ * val() 获取元素value值或设置
 
 > [!NOTE]
 >
@@ -51,7 +51,7 @@ interface Offset {
 }
 interface ElementCore<T> {
     value: T | ElementCore<T>[];
-    attr(prop: string, value?: string): string | ElementCore<T>;
+    attr(prop: string, value?: string): string | ElementCore<T> | false;
     readonly classList: string[];
     hasClass(className: string): boolean;
     addClass(className: string): ElementCore<T>;
@@ -61,8 +61,14 @@ interface ElementCore<T> {
     prepend(template: string): ElementCore<T>;
     focus(): ElementCore<T>;
     blur(): ElementCore<T>;
-    css(name: keyof CSSStyleDeclaration, value: string | number): (string | number) | ElementCore<T>;
-    on(type: GlobalEventHandlersEventMap, listener: EventListenerOrEventListenerObject): ElementCore<T>;
+    css(
+        name: keyof CSSStyleDeclaration,
+        value: string | number
+    ): (string | number) | ElementCore<T>;
+    on(
+        type: GlobalEventHandlersEventMap,
+        listener: EventListenerOrEventListenerObject
+    ): ElementCore<T>;
     offset(): Offset;
     readonly width: number;
     readonly height: number;
@@ -77,12 +83,12 @@ interface ElementCore<T> {
     innerHeight(): number;
     outerWidth(): number;
     outerHeight(): number;
-    each(eachItems: (item: ElementCore<T> | undefined) => void): ElementCore<T>;
     scrollTo(scrollHeight: number): ElementCore<T>;
     fadeIn(): ElementCore<T>;
     fadeOut(): ElementCore<T>;
+    val(value?: string): string | ElementCore<T>;
 }
-export declare function $<T extends Element>(selector: string): ElementCore<T> | ElementCore<T>[];
+export declare function $<T extends HTMLElement>(selector: string): ElementCore<T> | ElementCore<T>[];
 
 ```
 

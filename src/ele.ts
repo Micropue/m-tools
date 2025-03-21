@@ -24,8 +24,9 @@
  * text() 添加innerText进入元素
  * innerWidth()、innerHeight()、outerWidth()、outerHeight()
  * scrollTo() 元素内滚动
- * fadeIn()
- * fadeOut()
+ * fadeIn() 淡入
+ * fadeOut() 淡出
+ * val() 获取元素value值或设置
  */
 interface Offset {
     readonly top: number;
@@ -70,6 +71,7 @@ interface ElementCore<T> {
     scrollTo(scrollHeight: number): ElementCore<T>;
     fadeIn(): ElementCore<T>;
     fadeOut(): ElementCore<T>;
+    val(value?: string): string | ElementCore<T>;
 }
 const useCore = <T extends HTMLElement>(element: T) => {
     const core: ElementCore<T> = {
@@ -229,11 +231,41 @@ const useCore = <T extends HTMLElement>(element: T) => {
             return this
         },
         fadeIn: function (): ElementCore<T> {
-            throw new Error("Function not implemented.");
+            let opacity = 0
+            this.show()
+            function _animate() {
+                element.style.opacity = (opacity += 0.05).toString()
+                if (opacity < 1)
+                    requestAnimationFrame(_animate)
+                else
+                    element.style.opacity = "1"
+            }
+            requestAnimationFrame(_animate)
+            return this
         },
         fadeOut: function (): ElementCore<T> {
-            throw new Error("Function not implemented.");
+            let opacity = 1
+            const { hide } = this
+            function _animate() {
+                element.style.opacity = (opacity -= 0.05).toString()
+                if (opacity > 0)
+                    requestAnimationFrame(_animate)
+                else {
+                    element.style.opacity = (0).toString()
+                    hide()
+                }
+            }
+            requestAnimationFrame(_animate)
+            return this
         },
+        val: function (value: string): ElementCore<T> | string {
+            if (value) {
+                (element as unknown as HTMLInputElement | HTMLTextAreaElement).value = value
+                return this
+            }else{
+                return (element as unknown as HTMLInputElement | HTMLTextAreaElement).value
+            }
+        }
     };
     return core;
 };

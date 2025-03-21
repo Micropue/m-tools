@@ -35,6 +35,7 @@ interface ElementCore<T> {
     scrollTo(scrollHeight: number): ElementCore<T>;
     fadeIn(): ElementCore<T>;
     fadeOut(): ElementCore<T>;
+    val(value?: string): string | ElementCore<T>;
 }
 export declare function $<T extends HTMLElement>(selector: string): ElementCore<T> | ElementCore<T>[];
 export {};

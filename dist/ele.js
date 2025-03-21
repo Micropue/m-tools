@@ -150,11 +150,42 @@ const useCore = (element) => {
             return this;
         },
         fadeIn: function () {
-            throw new Error("Function not implemented.");
+            let opacity = 0;
+            this.show();
+            function _animate() {
+                element.style.opacity = (opacity += 0.05).toString();
+                if (opacity < 1)
+                    requestAnimationFrame(_animate);
+                else
+                    element.style.opacity = "1";
+            }
+            requestAnimationFrame(_animate);
+            return this;
         },
         fadeOut: function () {
-            throw new Error("Function not implemented.");
+            let opacity = 1;
+            const { hide } = this;
+            function _animate() {
+                element.style.opacity = (opacity -= 0.05).toString();
+                if (opacity > 0)
+                    requestAnimationFrame(_animate);
+                else {
+                    element.style.opacity = (0).toString();
+                    hide();
+                }
+            }
+            requestAnimationFrame(_animate);
+            return this;
         },
+        val: function (value) {
+            if (value) {
+                element.value = value;
+                return this;
+            }
+            else {
+                return element.value;
+            }
+        }
     };
     return core;
 };
