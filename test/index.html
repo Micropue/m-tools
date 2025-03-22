@@ -84,6 +84,18 @@
             })
         }
     </script>
+    <h1>测试日期格式化</h1>
+    <input type="text" value="Y年m月d日" class="time-regexp">
+    <button onclick="timeout()">输出</button>
+    <p class="time-out"></p>
+    <script>
+        const {date} = $m
+        function timeout(){
+            const regexp = document.querySelector(".time-regexp").value
+            const timeOut = document.querySelector(".time-out")
+            timeOut.innerHTML = date(regexp).toString()
+        }
+    </script>
 </body>
 
 </html>
